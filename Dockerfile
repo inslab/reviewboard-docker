@@ -31,7 +31,7 @@ RUN sed -i 's/DEBUG = False/DEBUG = True/g' /srv/reviews.local/conf/settings_loc
 # fix permissions
 RUN chown -R www-data:www-data /srv/reviews.local/data /srv/reviews.local/htdocs/media/uploaded /srv/reviews.local/htdocs/media/ext /srv/reviews.local/data /srv/reviews.local/logs
 
-RUN chmod -R 777 /srv/reviews.local/data /srv/reviews.local/htdocs/media/uploaded /srv/reviews.local/htdocs/media/ext /srv/reviews.local/data /srv/reviews.local/logs
+ADD data/reviewboard /srv/reviews.local/data/reviewboard
 
 # configure apache
 RUN cp /srv/reviews.local/conf/apache-wsgi.conf /etc/apache2/sites-available/reviews.local
