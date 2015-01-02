@@ -1,4 +1,1 @@
-reviewboard
-===========
-
-docker repository
+reviewboard-docker
