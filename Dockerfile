@@ -21,12 +21,14 @@ RUN apt-get install -y memcached python-memcache
 RUN apt-get install -y apache2 libapache2-mod-wsgi
 
 # initialize reviewboard
-RUN rb-site install --noinput --domain-name=inslabdocker.cloudapp.net --db-type=sqlite3 --db-name=reviewboard --cache-type=memcached --web-server-type=apache --admin-user=admin --admin-password=admin --admin-email=noreply@inslab.co.kr /srv/reviews.local
+RUN rb-site install --noinput --domain-name=reviews.local --site-root=/reviewboard/ --db-type=sqlite3 --db-name=reviewboard --cache-type=memcached --web-server-type=apache --admin-user=admin --admin-password=admin --admin-email=noreply@inslab.co.kr /srv/reviews.local
 
 # update config with new data file location
 RUN sed -i 's/reviewboard/\/srv\/reviews.local\/data\/reviewboard/g' /srv/reviews.local/conf/settings_local.py
 # turn debug on. Useful usually
 RUN sed -i 's/DEBUG = False/DEBUG = True/g' /srv/reviews.local/conf/settings_local.py
+# recover SITE_ROOT
+RUN sed -i "s/^SITE_ROOT.*/SITE_ROOT = \'\/reviewboard\/\'/g" /srv/reviews.local/conf/settings_local.py
 
 # fix permissions
 RUN chown -R www-data:www-data /srv/reviews.local/data /srv/reviews.local/htdocs/media/uploaded /srv/reviews.local/htdocs/media/ext /srv/reviews.local/data /srv/reviews.local/logs
