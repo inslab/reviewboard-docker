@@ -3,7 +3,8 @@ FROM ubuntu:12.04
 MAINTAINER Vilius Lukosius <vilius.lukosius@gmail.com>
 
 # make sure the package repository is up to date
-RUN apt-get update
+RUN apt-get -y update
+RUN apt-get -y upgrade
 
 # install sshd and supervisor
 RUN apt-get install -y openssh-server supervisor
@@ -14,7 +15,7 @@ RUN apt-get install -y python-setuptools python-dev patch subversion python-svn 
 RUN easy_install ReviewBoard
 
 # install supported DVCS
-RUN apt-get install -y python-subvertpy
+RUN apt-get install -y python-subvertpy git-core
 
 # install external dependencies
 RUN apt-get install -y memcached python-memcache
@@ -32,8 +33,6 @@ RUN sed -i "s/^SITE_ROOT.*/SITE_ROOT = \'\/reviewboard\/\'/g" /srv/reviews.local
 
 # fix permissions
 RUN chown -R www-data:www-data /srv/reviews.local/data /srv/reviews.local/htdocs/media/uploaded /srv/reviews.local/htdocs/media/ext /srv/reviews.local/data /srv/reviews.local/logs
-
-ADD data/reviewboard /root/reviewboard
 
 # configure apache
 RUN cp /srv/reviews.local/conf/apache-wsgi.conf /etc/apache2/sites-available/reviews.local
@@ -60,4 +59,7 @@ ADD scripts/run_supervisord.sh /usr/local/sbin/run_supervisord
 
 expose 22 80
 
-CMD ["/usr/local/sbin/run_supervisord"]
+ADD run.sh /run.sh
+RUN chmod +x /run.sh
+
+CMD ["/run.sh"]
