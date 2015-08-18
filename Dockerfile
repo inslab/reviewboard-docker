@@ -1,6 +1,6 @@
 FROM ubuntu:12.04
 
-MAINTAINER Vilius Lukosius <vilius.lukosius@gmail.com>
+MAINTAINER Sunchan Lee <sunchanlee@inslab.co.kr>
 
 # make sure the package repository is up to date
 RUN apt-get -y update
@@ -9,7 +9,7 @@ RUN apt-get -y upgrade
 # install sshd and supervisor
 RUN apt-get install -y openssh-server supervisor
 # install base dependencies
-RUN apt-get install -y python-setuptools python-dev patch subversion python-svn git-core sqlite3 libsqlite3-dev
+RUN apt-get install -y python-setuptools python-dev patch subversion python-svn git-core sqlite3 libsqlite3-dev python-ldap
 
 # install reviewboard
 RUN easy_install ReviewBoard
@@ -58,6 +58,9 @@ RUN apt-get clean
 ADD scripts/run_supervisord.sh /usr/local/sbin/run_supervisord
 
 expose 22 80
+
+#ENV LDAP_URI
+#ENV LDAP_BASE_DN
 
 ADD run.sh /run.sh
 RUN chmod +x /run.sh
