@@ -11,8 +11,10 @@ RUN apt-get install -y openssh-server supervisor
 # install base dependencies
 RUN apt-get install -y python-setuptools python-dev patch subversion python-svn git-core sqlite3 libsqlite3-dev python-ldap
 
+RUN easy_install pip
+
 # install reviewboard
-RUN easy_install ReviewBoard
+RUN pip install ReviewBoard
 
 # install supported DVCS
 RUN apt-get install -y python-subvertpy git-core
@@ -58,9 +60,6 @@ RUN apt-get clean
 ADD scripts/run_supervisord.sh /usr/local/sbin/run_supervisord
 
 expose 22 80
-
-#ENV LDAP_URI
-#ENV LDAP_BASE_DN
 
 ADD run.sh /run.sh
 RUN chmod +x /run.sh

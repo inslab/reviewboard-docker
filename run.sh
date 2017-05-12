@@ -7,12 +7,13 @@ then
     cp /srv/reviews.local/reviewboard /srv/reviews.local/data/
 fi
 
-if [ -n "$LDAP_URI" ] && [ -n "$LDAP_BASE_DN" ]
+if [ -n "$LDAP_HOST" ] && [ -n "$LDAP_PORT" ] && [ -n "$LDAP_BASE_DN" ]
 then
     echo "-> LDAP setting"
-    echo "LDAP URI: $LDAP_URI"
+    echo "LDAP HOST: $LDAP_HOST"
+    echo "LDAP PORT: $LDAP_PORT"
     echo "LDAP BASE DN: $LDAP_BASE_DN"
-    rb-site manage /srv/reviews.local set-siteconfig -- --key=auth_ldap_uri --value="$LDAP_URI"
+    rb-site manage /srv/reviews.local set-siteconfig -- --key=auth_ldap_uri --value=ldap://"$LDAP_HOST":"$LDAP_PORT"
     rb-site manage /srv/reviews.local set-siteconfig -- --key=auth_ldap_base_dn --value="$LDAP_BASE_DN"
     rb-site manage /srv/reviews.local set-siteconfig -- --key=auth_backend --value=ldap
 else
